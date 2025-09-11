@@ -1,4 +1,8 @@
 import express from 'express'
+import pkg from '@prisma/client'
+const { PrismaClient } = pkg
+
+const prisma = new PrismaClient()
 
 const app = express()
 
@@ -9,9 +13,15 @@ app.use(express.json()) /*Para o express reconhecer JSON */
 const users = []
 
 /*Rota Post (criar) */
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
 
-    users.push(req.body)
+    await prisma.user.create({
+        data: {
+            email: req.body.email,
+            name: req.body.name,
+            age: req.body.age
+        }
+    })
 
     res.status(201).json(req.body)
 })
