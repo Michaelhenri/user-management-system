@@ -10,8 +10,6 @@ app.use(express.json()) /*Para o express reconhecer JSON */
 
 /*request, response req: requisição res: resposta */
 
-const users = []
-
 /*Rota Post (criar) */
 app.post('/users', async (req, res) => {
 
@@ -27,12 +25,43 @@ app.post('/users', async (req, res) => {
 })
 
 /*Rota Get (listar)*/
-app.get('/users', (req, res) => {
+app.get('/users', async (req, res) => {
+
+    const users = await prisma.user.findMany()
 
     res.status(200).json(users) /*JSON, pois meus usuarios estão criados como JSON */
+})
+
+/*Rota Put (atualizar/modificar) */
+app.put('/users/:id', async (req, res) => {
+
+    await prisma.user.update({
+        where: {
+            id: req.params.id
+        },
+        data: {
+            email: req.body.email,
+            name: req.body.name,
+            age: req.body.age
+        }
+    })
+
+    res.status(204).json(req.body)
+})
+
+/*Rota Delete (deletar) */
+app.delete('/users/:id', async (req, res) => {
+
+    await prisma.user.delete({
+        where: {
+            id: req.params.id
+        }
+    })
+
+    res.status(200).json({ message: 'Usuário deletado com sucesso!' })
 
 })
 
 app.listen(3000)
 
-/*Metodo "send" serve para enviar a resposta de volta para o cliente */
+/*findMany() e uma função que lista TODOS meus usuários */
