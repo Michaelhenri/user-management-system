@@ -19,7 +19,7 @@ app.post('/users', async (req, res) => {
         data: {
             email: req.body.email,
             name: req.body.name,
-            age: req.body.age
+            age: Number(req.body.age)
         }
     })
 
@@ -56,8 +56,8 @@ app.delete('/users/:id', async (req, res) => {
 
     await prisma.user.delete({
         where: {
-            id: req.params.id
-        }
+            id: req.params.id,
+        },
     })
 
     res.status(200).json({ message: 'Usuário deletado com sucesso!' })
