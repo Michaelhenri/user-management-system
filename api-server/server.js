@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import pkg from '@prisma/client'
 const { PrismaClient } = pkg
 
@@ -7,6 +8,7 @@ const prisma = new PrismaClient()
 const app = express()
 
 app.use(express.json()) /*Para o express reconhecer JSON */
+app.use(cors())
 
 /*request, response req: requisição res: resposta */
 
